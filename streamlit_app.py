@@ -70,9 +70,9 @@ def get_conversation_chain():
         st.stop()
         
     llm = ChatOpenAI(
-        model="gpt-4o",  # Gebruik gpt-4o-mini
+        model="gpt-4o",  # Gebruik gpt-4o
         temperature=0.7,
-        open_api_key=api_key  # Gebruik api_key in plaats van openai_api_key
+        openai_api_key=api_key  # Gebruik api_key in plaats van openai_api_key
     )
     
     memory = ConversationBufferMemory(
