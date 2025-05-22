@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotel Chatbot</title>
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('message').value;
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input })
+      });
+      const data = await res.json();
+      document.getElementById('chatbox').innerText += "Gast: " + input + "\nAssistent: " + data.response + "\n\n";
+      document.getElementById('message').value = '';
+    }
+  </script>
+</head>
+<body>
+  <h2>Welkom bij Hotel Chat</h2>
+  <pre id="chatbox" style="border:1px solid #ccc; padding:10px; height:300px; overflow-y:scroll;"></pre>
+  <input type="text" id="message" placeholder="Typ je vraag..." style="width:70%;" />
+  <button onclick="sendMessage()">Verstuur</button>
+</body>
+</html>
