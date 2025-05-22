@@ -6,8 +6,15 @@ from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 import os
 
-# .env laden
+# Laad .env voor lokale ontwikkeling
 load_dotenv()
+
+# Haal API key uit Streamlit Secrets of .env
+api_key = st.secrets["openai"]["api_key"] if "openai" in st.secrets else os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    st.error("Geen OpenAI API key gevonden! Voeg een API key toe aan je Streamlit Secrets of .env bestand.")
+    st.stop()
 
 # Context voor hotelvragen
 HOTEL_CONTEXT = """
@@ -63,16 +70,10 @@ if "messages" not in st.session_state:
 # Initialiseer LLM en memory
 @st.cache_resource
 def get_conversation_chain():
-    # Eenvoudigere instantiatie zonder extra parameters
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        st.error("Geen OpenAI API key gevonden! Voeg een OPENAI_API_KEY toe aan je .env bestand of Streamlit secrets.")
-        st.stop()
-        
     llm = ChatOpenAI(
-        model="gpt-4o",  # Gebruik gpt-4o
+        model="gpt-4o",
         temperature=0.7,
-        openai_api_key=api_key  # Gebruik api_key in plaats van openai_api_key
+        openai_api_key=api_key
     )
     
     memory = ConversationBufferMemory(
